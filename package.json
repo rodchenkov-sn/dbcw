@@ -46,9 +46,13 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "bulma": "^0.9.1",
     "electron-squirrel-startup": "^1.0.0",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "tabulator-tables": "^4.9.1"
+    "parsleyjs": "^2.9.2",
+    "tabulator-tables": "^4.9.1",
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",

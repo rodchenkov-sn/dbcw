@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const authRepository = require('../../model/auth-repository')
+const employeesRepository = require('../../model/employees-repository')
 
 const loginInput = document.getElementById('login_input');
 const passwordInput = document.getElementById('password_input');
@@ -16,7 +16,7 @@ loginButton.onclick = async () => {
   let login = loginInput.value;
   let password = passwordInput.value;
   if (validateInputs(login, password)) {
-    authRepository.authUser(login, password).then(() => {
+    employeesRepository.authUser(login, password).then(() => {
       window.location.assign(path.join(__dirname, '../index/index.html'));
     });
   }

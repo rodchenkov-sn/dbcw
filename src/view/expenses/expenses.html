@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  <script defer src="employees.js"></script>
+  <script defer src="expenses.js"></script>
   <link rel="stylesheet" href="../assets/css/tabulator-fix.css">
   <link rel="stylesheet" href="../assets/css/scrollbar.css">
 
@@ -22,9 +22,12 @@
 
   <div class="tabs">
     <ul>
+      <li><a class="nav_group_item" href="../employees/employees.html">Employees</a></li>
       <li><a class="nav_group_item" href="../projects/projects.html">Projects</a></li>
       <li><a class="nav_group_item" href="../project-types/project-types.html">Price list</a></li>
-      <li><a class="nav_group_item" href="../expenses/expenses.html">Expenses</a></li>
+      <li class="is-active">
+        <a class="nav_group_item" href="../expenses/expenses.html">Expenses</a>
+      </li>
       <li><a class="nav_group_item" href="../sick-list/sick-list.html">Sick list</a></li>
       <li><a class="nav_group_item" href="../brigades/brigades.html">Brigades</a></li>
       <li><a class="nav_group_item" href="../shifts/shifts.html">Shifts</a></li>
@@ -38,12 +41,9 @@
         <p class="control">
           <span class="select">
             <select id="filter-field">
-              <option></option>
-              <option value="employmentName">Employment</option>
-              <option value="login">Login</option>
-              <option value="firstName">First name</option>
-              <option value="lastName">Last name</option>
-              <option value="salary">Salary</option>
+              <option value="relatedProject">Related project</option>
+              <option value="amount">Amount</option>
+              <option value="date">Date</option>
             </select>
           </span>
         </p>
@@ -78,34 +78,17 @@
     <div class="columns">
       <div class="column">
         <form class="box">
-          <div id="add-user-error" class="notification is-danger is-light" hidden>
-            Could not add employee due to some server issues or inadequate input
+          <div class="field">
+            <label class="label">Project</label>
+            <input class="input is-primary" type="number" id="project-input" required>
           </div>
           <div class="field">
-            <label class="label">Login</label>
-            <input class="input is-primary" type="text" id="login-input" required">
+            <label class="label">Amount</label>
+            <input class="input is-primary" type="number" id="amount-input" required>
           </div>
           <div class="field">
-            <label class="label">Password</label>
-            <input class="input is-primary" type="text" id="password-input" required">
-          </div>
-          <div class="field">
-            <label class="label">First name</label>
-            <input class="input is-primary" type="text" id="first-name-input" required">
-          </div>
-          <div class="field">
-            <label class="label">Last name</label>
-            <input class="input is-primary" type="text" id="last-name-input" required">
-          </div>
-          <div class="field">
-            <label class="label">Salary</label>
-            <input class="input is-primary" type="number" id="salary-input" required min="1">
-          </div>
-          <div class="field">
-            <label class="label">Employment</label>
-            <select id="employment-input" class="select is-primary" required>
-
-            </select>
+            <label class="label">Date</label>
+            <input class="input is-primary" type="date" id="date-input" required>
           </div>
           <div class="field is-grouped">
             <div class="control">

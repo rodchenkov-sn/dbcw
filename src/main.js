@@ -12,18 +12,14 @@ const createWindow = () => {
     width: 1080,
     height: 720,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webviewTag: true
     }
   });
   mainWindow.loadFile(path.join(__dirname, 'view/login/login.html'));
-  mainWindow.webContents.on('will-navigate', function (evt, url) {
-    if (!url.endsWith('index.html')) {
-      evt.preventDefault();
-      mainWindow.webContents.executeJavaScript('loadPageWithIframe("' + url + '");');
-    }
-  });
 };
 
+app.allowRendererProcessReuse = false;
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
