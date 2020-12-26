@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
 if (require('electron-squirrel-startup')) {
@@ -13,7 +13,7 @@ const createWindow = () => {
     height: 720,
     webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
+      enableRemoteModule: true
     }
   });
   mainWindow.loadFile(path.join(__dirname, 'view/login/login.html'));

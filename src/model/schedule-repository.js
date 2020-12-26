@@ -66,6 +66,10 @@ class ScheduleRepository {
     await this.query('delete from shifts where id = ?', [id]);
   }
 
+  async addShift(shift) {
+    await this.query('call add_shift(?, ?, ?)', [shift.login, shift.brigadeId, shift.started]);
+  }
+
   async updateShiftBrigade(shiftId, brigadeId) {
     await this.query('call change_shift_brigade(?, ?)', [shiftId, brigadeId]);
   }
@@ -91,6 +95,10 @@ class ScheduleRepository {
 
   async updateScheduleBrigade(scheduleId, brigadeId) {
     await this.query('call change_schedule_brigade(?, ?)', [scheduleId, brigadeId]);
+  }
+
+  async addSchedule(scheduleInfo) {
+    await this.query('call add_to_schedule(?, ?, ?)', [scheduleInfo.project, scheduleInfo.brigadeId, scheduleInfo.started]);
   }
 }
 

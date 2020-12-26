@@ -60,7 +60,7 @@ class EmployeesRepository {
       }
       return this.authorizedUser;
     }
-    throw 'unauthorized'
+    throw 'invalid password';
   }
 
   async getEmployees() {
@@ -105,14 +105,29 @@ class EmployeesRepository {
   async getSickList() {
     return await this.query(`
       select
+        s.id,
         s.opened,
         s.closed,
         s.serial_number as serialNumber,
+        e.login as login,
         e.first_name as firstName,
         e.last_name as lastName
       from sick_list as s
         left join employees as e on e.id = s.related_employee;`
     );
+  }
+
+  async addToSickList(sickList) {
+    await this.query('call add_sick_list(?, ?, ?, ?)', [
+      sickList.login,
+      sickList.opened,
+      sickList.closed,
+      sickList.serial
+    ]);
+  }
+
+  async deleteSickList(id) {
+    await this.query('delete from sick_list where id = ?', [id]);
   }
 
 }

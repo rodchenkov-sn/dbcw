@@ -94,3 +94,14 @@ async function reloadTableData() {
 }
 
 reloadTableData();
+
+document.querySelector('form').addEventListener('submit', (_event) => {
+  let login = document.getElementById('login-input').value;
+  let brigadeId = document.getElementById('brigade-input').value;
+  let started = document.getElementById('started-input').value;
+  scheduleRepository.addShift({
+    login: login,
+    brigadeId: brigadeId,
+    started: started
+  }).then(reloadTableData);
+});

@@ -2,16 +2,57 @@
 <html>
 
 <head>
+  <title>CW-App</title>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
-  <script defer src=".\login.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <script defer src="login.js"></script>
+  <link rel="stylesheet" href="../assets/css/scrollbar.css">
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 </head>
 
 <body>
-  <h1>Well cum</h1>
-  <input type="text" id="login_input" placeholder="login" />
-  <input type="text" id="password_input" placeholder="password" />
-  <button id="login_button">Enter Cum Zone</button>
+
+  <section class="hero is-primary is-fullheight is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <form action="" class="box">
+              <div class="field">
+                <label for="" class="label">Login</label>
+                <div class="control">
+                  <input type="text" class="input" id="login-input" required>
+                </div>
+              </div>
+              <div class="field">
+                <label for="" class="label">Password</label>
+                <div class="control">
+                  <input type="password" class="input" id="password-input" required>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox">
+                    <input type="checkbox" onclick="togglePassword()">
+                    Show password
+                  </label>
+                </div>
+              </div>
+              <div class="field">
+                <button class="button is-success">
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </body>
 
 </html>

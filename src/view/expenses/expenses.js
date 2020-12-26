@@ -38,7 +38,9 @@ document.getElementById("filter-clear").onclick = () => {
 };
 
 var table = new Tabulator("#example-table", {
-  height: 400,
+  pagination: "local",
+  paginationSize: 10,
+  paginationSizeSelector: [10, 25, 50, 100],
   data: [],
   layout: "fitColumns",
   columns: [

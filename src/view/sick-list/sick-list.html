@@ -2,39 +2,110 @@
 <html>
 
 <head>
+  <title>CW-App</title>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   <script defer src="sick-list.js"></script>
-  <link href="https://unpkg.com/tabulator-tables@4.9.1/dist/css/tabulator.min.css" rel="stylesheet">
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.1/dist/js/tabulator.min.js"></script>
+  <link rel="stylesheet" href="../assets/css/tabulator-fix.css">
+  <link rel="stylesheet" href="../assets/css/scrollbar.css">
+
+  <!-- Tabulator -->
+  <link href="https://unpkg.com/tabulator-tables/dist/css/bulma/tabulator_bulma.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 </head>
 
-<body style="background: white;">
-  <div>
-    <select id="filter-field">
-      <option value="firstName">First name</option>
-      <option value="lastName">Last name</option>
-      <option value="opened">Opened</option>
-      <option value="closed">Closed</option>
-      <option value="serialNumber">Serial number</option>
-    </select>
+<body>
 
-    <select id="filter-type">
-      <option value="="> = </option>
-      <option value="<">
-        < </option>
-      <option value="<=">
-        <= </option>
-      <option value=">"> > </option>
-      <option value=">="> >= </option>
-      <option value="!="> != </option>
-      <option value="like"> like </option>
-    </select>
-    <input id="filter-value" type="text" placeholder="value to filter">
-    <button id="filter-clear">Clear filter</button>
+  <div class="tabs">
+    <ul>
+      <li> <a class="nav_group_item" href="../employees/employees.html">Employees</a></li>
+      <li><a class="nav_group_item" href="../projects/projects.html">Projects</a></li>
+      <li><a class="nav_group_item" href="../project-types/project-types.html">Price list</a></li>
+      <li><a class="nav_group_item" href="../expenses/expenses.html">Expenses</a></li>
+      <li class="is-active">
+        <a class="nav_group_item" href="../sick-list/sick-list.html">Sick list</a>
+      </li>
+      <li><a class="nav_group_item" href="../brigades/brigades.html">Brigades</a></li>
+      <li><a class="nav_group_item" href="../shifts/shifts.html">Shifts</a></li>
+      <li><a class="nav_group_item" href="../schedule/schedule.html">Schedule</a></li>
+    </ul>
   </div>
-  <div id="example-table"></div>
+
+  <div class="main-content-wrapper" style="padding: 0 1rem 2rem;">
+    <div class="box">
+      <div class="field has-addons">
+        <p class="control">
+          <span class="select">
+            <select id="filter-field">
+              <option value="firstName">First name</option>
+              <option value="lastName">Last name</option>
+              <option value="opened">Opened</option>
+              <option value="closed">Closed</option>
+              <option value="serialNumber">Serial number</option>
+            </select>
+          </span>
+        </p>
+        <p class="control">
+          <span class="select">
+            <select id="filter-type">
+              <option value="="> = </option>
+              <option value="<">
+                < </option>
+              <option value="<=">
+                <= </option>
+              <option value=">"> > </option>
+              <option value=">="> >= </option>
+              <option value="!="> != </option>
+              <option value="like"> like </option>
+            </select>
+          </span>
+        </p>
+        <p class="control is-expanded">
+          <input id="filter-value" type="text" placeholder="value to filter" class="input">
+        </p>
+        <p class="control">
+          <a class="button" id="filter-clear">
+            Reset
+          </a>
+        </p>
+      </div>
+
+      <div id="example-table"></div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <form class="box">
+          <div class="field">
+            <label class="label">Login</label>
+            <input class="input is-primary" type="text" id="login-input" required>
+          </div>
+          <div class="field">
+            <label class="label">Opened</label>
+            <input class="input is-primary" type="date" id="opened-input" required>
+          </div>
+          <div class="field">
+            <label class="label">Closed</label>
+            <input class="input is-primary" type="date" id="closed-input" required>
+          </div>
+          <div class="field">
+            <label class="label">Serial number</label>
+            <input class="input is-primary" type="text" id="serial-input" required>
+          </div>
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="submit" class="button is-primary">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="column"></div>
+    </div>
+  </div>
 
 </body>
 

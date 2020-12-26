@@ -53,7 +53,7 @@ var table = new Tabulator("#example-table", {
   data: [],
   layout: "fitColumns",
   columns: [
-    { tytle: 'Id', field: 'id' },
+    { title: 'Id', field: 'id' },
     { title: 'Type', field: 'typeName' },
     { title: 'Price', field: 'price' },
     { title: 'Opened', field: 'opened', formatter: dateFormatter },
@@ -96,3 +96,24 @@ async function reloadTableData() {
 }
 
 reloadTableData();
+
+projectsRepository.getTypes().then((types) => {
+  let typeSelection = document.querySelector('#type-input');
+  for (let [id, val] of types) {
+    if (val.active) {
+      typeSelection.insertAdjacentHTML(
+        'beforeend',
+        `<option value="${id}">${val.name}</option>`
+      )
+    }
+  }
+});
+
+document.querySelector('form').addEventListener('submit', (_event) => {
+  let opened = document.getElementById('opened-input').value;
+  let type = document.getElementById('type-input').value;
+  projectsRepository.addProject({
+    type: type,
+    opened: opened
+  }).then(reloadTableData);
+});

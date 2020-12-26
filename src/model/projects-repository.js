@@ -24,6 +24,10 @@ class ProjectsRepository {
     return await this.query('select * from projects');
   }
 
+  async addProject(project) {
+    await this.query('insert into projects value (null, ?, ?, null, 3)', [project.type, project.opened]);
+  }
+
   async getStates() {
     let result = await this.query('select * from project_states');
     let states = new Map();
@@ -37,7 +41,7 @@ class ProjectsRepository {
     let result = await this.query('select * from project_types');
     let types = new Map();
     for (let row of result) {
-      types.set(row.id, { name: row.name, price: row.price });
+      types.set(row.id, { name: row.name, price: row.price, active: row.active });
     }
     return types;
   }
@@ -46,10 +50,22 @@ class ProjectsRepository {
     return await this.query('select * from project_types');
   }
 
+  async addType(projectType) {
+    await this.query('insert into project_types value (null, ?, ?, 1)', [projectType.name, projectType.price]);
+  }
+
+  async deleteType(id) {
+    await this.query(`
+      delete from project_types where id = ? and not exists(
+        select * from projects where projects.type = ?)`,
+      [id, id]
+    )
+  }
+
   async updateType(projectType) {
     await this.query(
-      'update project_types set name = ?, price = ? where id = ?',
-      [projectType.name, projectType.price, projectType.id]
+      'call update_project_type(?, ?, ?, ?)',
+      [projectType.id, projectType.name, projectType.price, projectType.active]
     );
   }
 

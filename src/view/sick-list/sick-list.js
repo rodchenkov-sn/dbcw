@@ -49,15 +49,27 @@ document.getElementById("filter-clear").onclick = () => {
 };
 
 var table = new Tabulator("#example-table", {
-  height: 400,
+  pagination: "local",
+  paginationSize: 10,
+  paginationSizeSelector: [10, 25, 50, 100],
   data: [],
   layout: "fitColumns",
   columns: [
+    { title: 'Login', field: 'login' },
     { title: 'First name', field: 'firstName' },
     { title: 'Last name', field: 'lastName' },
     { title: 'Opened', field: 'opened', formatter: dateFormatter },
     { title: 'Closed', field: 'closed', formatter: dateFormatter },
     { title: 'Serial number', field: 'serialNumber' }
+  ],
+  rowContextMenu: [
+    {
+      label: 'Delete',
+      action: async (_e, row) => {
+        await employeesRepository.deleteSickList(row.getData().id);
+        reloadTableData();
+      }
+    }
   ]
 });
 
@@ -67,3 +79,16 @@ async function reloadTableData() {
 }
 
 reloadTableData();
+
+document.querySelector('form').addEventListener('submit', (_event) => {
+  let login = document.getElementById('login-input').value;
+  let opened = document.getElementById('opened-input').value;
+  let closed = document.getElementById('closed-input').value;
+  let serial = document.getElementById('serial-input').value;
+  employeesRepository.addToSickList({
+    login: login,
+    opened: opened,
+    closed: closed,
+    serial: serial
+  }).then(reloadTableData);
+});

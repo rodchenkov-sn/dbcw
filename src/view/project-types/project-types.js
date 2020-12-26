@@ -1,4 +1,5 @@
 const Tabulator = require('tabulator-tables');
+const { async } = require('validate.js');
 
 const projectsRepository = require('../../model/projects-repository')
 
@@ -37,12 +38,43 @@ document.getElementById("filter-clear").onclick = () => {
 };
 
 var table = new Tabulator("#example-table", {
-  height: 400,
+  pagination: "local",
+  paginationSize: 10,
+  paginationSizeSelector: [10, 25, 50, 100],
   data: [],
+  groupBy: 'active',
   layout: "fitColumns",
   columns: [
     { title: 'Name', field: 'name', editor: true },
-    { title: 'Price', field: 'price', editor: true, validator: ["min:0", "numeric"] }
+    { title: 'Price', field: 'price', editor: true, validator: ["min:0", "numeric"] },
+    { title: 'Active', field: 'active', hozAlign: "center", formatter: "tickCross" }
+  ],
+  rowContextMenu: [
+    {
+      label: 'Archive',
+      action: async (_e, row) => {
+        let t = row.getData();
+        t.active = false;
+        await projectsRepository.updateType(t);
+        reloadTableData()
+      }
+    },
+    {
+      label: 'Restore',
+      action: async (_e, row) => {
+        let t = row.getData();
+        t.active = true;
+        await projectsRepository.updateType(t);
+        reloadTableData();
+      }
+    },
+    {
+      label: 'Delete',
+      action: async (_e, row) => {
+        await projectsRepository.deleteType(row.getData().id);
+        reloadTableData();
+      }
+    }
   ],
   cellEdited: async (cell) => {
     await projectsRepository.updateType(cell.getRow().getData());
@@ -56,3 +88,12 @@ async function reloadTableData() {
 }
 
 reloadTableData();
+
+document.querySelector('form').addEventListener('submit', (_event) => {
+  let name = document.getElementById('name-input').value;
+  let price = document.getElementById('price-input').value;
+  projectsRepository.addType({
+    name: name,
+    price: price
+  }).then(reloadTableData);
+});

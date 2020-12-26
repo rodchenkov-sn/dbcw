@@ -87,3 +87,14 @@ async function reloadTableData() {
 }
 
 reloadTableData();
+
+document.querySelector('form').addEventListener('submit', (_event) => {
+  let started = document.getElementById('started-input').value;
+  let brigade = document.getElementById('brigade-input').value;
+  let project = document.getElementById('project-input').value;
+  scheduleRepository.addSchedule({
+    started: started,
+    brigadeId: brigade,
+    project: project
+  }).then(reloadTableData);
+});
