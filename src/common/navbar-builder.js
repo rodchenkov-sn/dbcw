@@ -19,7 +19,7 @@ async function makeNavbar() {
     case 6: // manager
       tabs += `<li><a class="nav_group_item" href="../projects/projects.html">Projects</a></li>
                <li><a class="nav_group_item" href="../project-types/project-types.html">Price list</a></li>
-               <li><a class="nav_group_item" href="../expenses/expenses.html">Expenses</a></li>
+               <li><a class="nav_group_item" href="../expenses/expenses.html">Finance</a></li>
                <li><a class="nav_group_item" href="../brigades/brigades.html">Brigades</a></li>
                <li><a class="nav_group_item" href="../schedule/schedule.html">Schedule</a></li>`
       break;

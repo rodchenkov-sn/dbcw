@@ -139,6 +139,31 @@ class EmployeesRepository {
     return await settings.get('user.id');
   }
 
+  async getSalaries(low, high) {
+    return await this.query(`
+      select
+        e.first_name as firstName,
+        e.last_name as lastName,
+        get_salary(e.id, '2020-12-01', '2021-01-01') as salary
+      from employees as e;
+    `);
+  }
+
+  async getExpenses(low, high) {
+    let result = await this.query('select get_expenses(?, ?) as expenses', [low, high]);
+    return result[0].expenses;
+  }
+
+  async getProfits(low, high) {
+    let result = await this.query('select get_profits(?, ?) as profits', [low, high]);
+    return result[0].profits;
+  }
+
+  async getBudget(low, high) {
+    let result = await this.query('select get_budget(?, ?) as budget', [low, high]);
+    return result[0].budget;
+  }
+
 }
 
 const employeesRepository = new EmployeesRepository();

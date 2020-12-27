@@ -57,6 +57,7 @@ class ScheduleRepository {
         b.base_location as baseLocation,
         e.first_name as firstName,
         e.last_name as lastName,
+        c.id as foremanId,
         c.first_name as chiefFirstName,
         c.last_name as chiefLastName
       from shifts as s
@@ -112,6 +113,18 @@ class ScheduleRepository {
     let result = await this.query('call add_to_schedule(?, ?, ?)', [scheduleInfo.project, scheduleInfo.brigadeId, scheduleInfo.started]);
     if (result.affectedRows !== 1) {
       throw 'Can\'t add to schedule because brigade is already busy, project is closed or opened after date';
+    }
+  }
+
+  async getFreeLabourer(wDate) {
+    try {
+      let result = await this.query('select get_free_labourer(?) as login', [wDate]);
+      if (result.length !== 1) {
+        throw 'Couldn\'t find a free labourer for specified date';
+      }
+      return result[0].login
+    } catch (_e) {
+      throw 'Couldn\'t find a free labourer for specified date';
     }
   }
 }

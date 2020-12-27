@@ -21,51 +21,110 @@
 <body>
 
   <div class="main-content-wrapper" style="padding: 0 1rem 2rem;">
+
     <div class="box">
-      <div class="field has-addons">
+      <div class="field has-addons is-flex is-justify-content-center">
         <p class="control">
-          <span class="select">
-            <select id="filter-field">
-              <option value="relatedProject">Related project</option>
-              <option value="amount">Amount</option>
-              <option value="date">Date</option>
-            </select>
-          </span>
+          <input id="low-date" type="date" class="input">
         </p>
         <p class="control">
-          <span class="select">
-            <select id="filter-type">
-              <option value="="> = </option>
-              <option value="<">
-                < </option>
-              <option value="<=">
-                <= </option>
-              <option value=">"> > </option>
-              <option value=">="> >= </option>
-              <option value="!="> != </option>
-              <option value="like"> like </option>
-            </select>
-          </span>
-        </p>
-        <p class="control is-expanded">
-          <input id="filter-value" type="text" placeholder="value to filter" class="input">
+          <a class="button is-static">
+            Low
+          </a>
         </p>
         <p class="control">
-          <a class="button" id="filter-clear">
-            Reset
+          <input id="high-date" type="date" class="input">
+        </p>
+        <p class="control">
+          <a class="button is-static">
+            High
           </a>
         </p>
       </div>
 
-      <div id="example-table"></div>
+      <div id="salary-table"></div>
+
+      <div class="field has-addons is-flex is-justify-content-center">
+        <p class="control">
+          <a class="button is-light">
+            Expenses
+          </a>
+        </p>
+        <p class="control">
+          <input id="expenses-output" type="text" class="input" disabled>
+        </p>
+      </div>
+      <div class="field has-addons is-flex is-justify-content-center">
+        <p class="control">
+          <a class="button is-light">
+            Profits
+          </a>
+        </p>
+        <p class="control">
+          <input id="profits-output" type="text" class="input" disabled>
+        </p>
+      </div>
+      <div class="field has-addons is-flex is-justify-content-center">
+        <p class="control">
+          <a class="button is-light">
+            Budget
+          </a>
+        </p>
+        <p class="control">
+          <input id="budget-output" type="text" class="input" disabled>
+        </p>
+      </div>
+
     </div>
 
     <div class="columns">
+      <div class="column is-three-quarters">
+        <div class="box">
+          <div class="field has-addons">
+            <p class="control">
+              <span class="select">
+                <select id="filter-field">
+                  <option value="relatedProject">Related project</option>
+                  <option value="amount">Amount</option>
+                  <option value="date">Date</option>
+                </select>
+              </span>
+            </p>
+            <p class="control">
+              <span class="select">
+                <select id="filter-type">
+                  <option value="="> = </option>
+                  <option value="<">
+                    < </option>
+                  <option value="<=">
+                    <= </option>
+                  <option value=">"> > </option>
+                  <option value=">="> >= </option>
+                  <option value="!="> != </option>
+                  <option value="like"> like </option>
+                </select>
+              </span>
+            </p>
+            <p class="control is-expanded">
+              <input id="filter-value" type="text" placeholder="value to filter" class="input">
+            </p>
+            <p class="control">
+              <a class="button" id="filter-clear">
+                Reset
+              </a>
+            </p>
+          </div>
+
+          <div id="example-table"></div>
+        </div>
+      </div>
       <div class="column">
         <form class="box">
           <div class="field">
             <label class="label">Project</label>
-            <input class="input is-primary" type="number" id="project-input" required>
+            <select id="project-input" class="select is-primary" required>
+
+            </select>
           </div>
           <div class="field">
             <label class="label">Amount</label>
@@ -82,8 +141,8 @@
           </div>
         </form>
       </div>
-      <div class="column"></div>
     </div>
+
   </div>
 
 </body>

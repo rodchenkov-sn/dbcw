@@ -1,6 +1,8 @@
 const Tabulator = require('tabulator-tables');
+const { dialog } = require('electron').remote;
 
 const projectsRepository = require('../../model/projects-repository');
+const employeesRepository = require('../../model/employees-repository');
 const dateFormatter = require('../../common/formatting');
 
 const makeNavbar = require('../../common/navbar-builder');
@@ -29,6 +31,18 @@ function updateFilter() {
     table.setFilter(filter, typeVal, valueEl.value);
   }
 }
+
+projectsRepository.getProjectsFull().then((projects) => {
+  let projectSelection = document.querySelector('#project-input');
+  for (let project of projects) {
+    if (project.state === 3) {
+      projectSelection.insertAdjacentHTML(
+        'beforeend',
+        `<option value="${project.id}">#${project.id} of ${project.typeName}</option>`
+      );
+    }
+  }
+});
 
 document.getElementById("filter-field").onchange = updateFilter;
 document.getElementById("filter-type").onchange = updateFilter;
@@ -70,6 +84,33 @@ async function reloadTableData() {
 
 reloadTableData();
 
+var salaryTable = new Tabulator("#salary-table", {
+  pagination: "local",
+  paginationSize: 10,
+  paginationSizeSelector: [10, 25, 50, 100],
+  data: [],
+  layout: "fitColumns",
+  columns: [
+    { title: 'First name', field: 'firstName' },
+    { title: 'Last name', field: 'lastName' },
+    { title: 'Salary', field: 'salary' }
+  ]
+});
+
+document.querySelector('#low-date').onchange = reloadSalaryData;
+document.querySelector('#high-date').onchange = reloadSalaryData;
+
+async function reloadSalaryData() {
+  let low = document.querySelector('#low-date').value;
+  let high = document.querySelector('#high-date').value;
+  if (low && high && low < high) {
+    salaryTable.replaceData(await employeesRepository.getSalaries(low, high));
+    document.querySelector('#expenses-output').value = await employeesRepository.getExpenses(low, high);
+    document.querySelector('#profits-output').value = await employeesRepository.getProfits(low, high);
+    document.querySelector('#budget-output').value = await employeesRepository.getBudget(low, high);
+  }
+}
+
 document.querySelector('form').addEventListener('submit', (_event) => {
   let project = document.getElementById('project-input').value;
   let amount = document.getElementById('amount-input').value;
@@ -78,5 +119,5 @@ document.querySelector('form').addEventListener('submit', (_event) => {
     amount: amount,
     relatedProject: project,
     date: date
-  }).then(reloadTableData);
+  }).then(reloadTableData).catch((reason) => dialog.showErrorBox('Couldn\'t add expense', reason));
 });

@@ -125,4 +125,14 @@ async function preparePage(readOnly) {
     }).then(reloadTableData).catch((reason) => dialog.showErrorBox('Could not add shift', reason));
   });
 
+  document.querySelector('#login-auto').onclick = (event) => {
+    event.preventDefault();
+    let started = document.getElementById('started-input').value;
+    if (started) {
+      scheduleRepository.getFreeLabourer(started)
+        .then((login) => document.getElementById('login-input').value = login)
+        .catch((reason) => dialog.showErrorBox('Couldn\'t find free labourer', reason));
+    }
+  }
+
 }

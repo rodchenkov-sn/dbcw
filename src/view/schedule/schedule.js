@@ -47,23 +47,25 @@ async function preparePage(readOnly) {
     table.clearFilter();
   };
 
-  let brigadeSelection = document.querySelector('#brigade-input');
-  let brigades = await scheduleRepository.getBrigades();
-  for (let brigade of brigades) {
-    brigadeSelection.insertAdjacentHTML(
-      'beforeend',
-      `<option value="${brigade.id}">#${brigade.id} of ${brigade.baseLocation}</option>`
-    );
-  }
-
-  let projectSelection = document.querySelector('#project-input');
-  let projects = await projectsRepository.getProjectsFull();
-  for (let project of projects) {
-    if (project.state === 3) {
-      projectSelection.insertAdjacentHTML(
+  if (!readOnly) {
+    let brigadeSelection = document.querySelector('#brigade-input');
+    let brigades = await scheduleRepository.getBrigades();
+    for (let brigade of brigades) {
+      brigadeSelection.insertAdjacentHTML(
         'beforeend',
-        `<option value="${project.id}">#${project.id} of ${project.typeName}</option>`
+        `<option value="${brigade.id}">#${brigade.id} of ${brigade.baseLocation}</option>`
       );
+    }
+
+    let projectSelection = document.querySelector('#project-input');
+    let projects = await projectsRepository.getProjectsFull();
+    for (let project of projects) {
+      if (project.state === 3) {
+        projectSelection.insertAdjacentHTML(
+          'beforeend',
+          `<option value="${project.id}">#${project.id} of ${project.typeName}</option>`
+        );
+      }
     }
   }
 
