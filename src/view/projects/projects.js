@@ -1,18 +1,12 @@
 const Tabulator = require('tabulator-tables');
+const { dialog } = require('electron').remote;
 
 const projectsRepository = require('../../model/projects-repository')
+const dateFormatter = require('../../common/formatting');
 
-var moment = require('moment');
+const makeNavbar = require('../../common/navbar-builder');
 
-function dateFormatter(cell, _formatterParams) {
-  var value = cell.getValue();
-
-  if (value) {
-    value = moment(value, "YYYY/MM/DD").format("MM/DD/YYYY");
-  }
-
-  return value;
-}
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");
@@ -73,8 +67,12 @@ var table = new Tabulator("#example-table", {
 });
 
 async function onProjectClosed(_e, row) {
-  await projectsRepository.closeProject(row.getData().id);
-  reloadTableData();
+  if (row.getData().opened > Date.now()) {
+    dialog.showErrorBox('Couldn\'t close project', 'Project can be closed only after it\'s been opened');
+  } else {
+    await projectsRepository.closeProject(row.getData().id);
+    reloadTableData();
+  }
 }
 
 async function onProjectDropped(_e, row) {
@@ -104,7 +102,7 @@ projectsRepository.getTypes().then((types) => {
       typeSelection.insertAdjacentHTML(
         'beforeend',
         `<option value="${id}">${val.name}</option>`
-      )
+      );
     }
   }
 });

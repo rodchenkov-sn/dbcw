@@ -4,7 +4,7 @@ const dateFormatter = (cell, _formatterParams) => {
   var value = cell.getValue();
 
   if (value) {
-    value = moment(value, "YYYY/MM/DD").format("MM/DD/YYYY");
+    value = moment(value, "YYYY/MM/DD").format("DD/MM/YYYY");
   }
 
   return value;

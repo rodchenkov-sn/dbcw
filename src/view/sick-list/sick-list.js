@@ -1,18 +1,12 @@
 const Tabulator = require('tabulator-tables');
+const { dialog } = require('electron').remote
 
 const employeesRepository = require('../../model/employees-repository')
+const dateFormatter = require('../../common/formatting');
 
-var moment = require('moment');
+const makeNavbar = require('../../common/navbar-builder');
 
-function dateFormatter(cell, _formatterParams) {
-  var value = cell.getValue();
-
-  if (value) {
-    value = moment(value, "YYYY/MM/DD").format("MM/DD/YYYY");
-  }
-
-  return value;
-}
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");
@@ -80,15 +74,21 @@ async function reloadTableData() {
 
 reloadTableData();
 
-document.querySelector('form').addEventListener('submit', (_event) => {
+document.querySelector('form').addEventListener('submit', (event) => {
   let login = document.getElementById('login-input').value;
   let opened = document.getElementById('opened-input').value;
   let closed = document.getElementById('closed-input').value;
   let serial = document.getElementById('serial-input').value;
-  employeesRepository.addToSickList({
-    login: login,
-    opened: opened,
-    closed: closed,
-    serial: serial
-  }).then(reloadTableData);
+  if (opened >= closed) {
+    event.preventDefault();
+    document.getElementById('closed-input').value = null;
+    dialog.showErrorBox('Could not add sick list', 'Open date must be less then close date');
+  } else {
+    employeesRepository.addToSickList({
+      login: login,
+      opened: opened,
+      closed: closed,
+      serial: serial
+    }).then(reloadTableData).catch((reason) => dialog.showErrorBox('Could not add sick list', reason));
+  }
 });

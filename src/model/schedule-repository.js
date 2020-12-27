@@ -20,7 +20,10 @@ class ScheduleRepository {
   }
 
   async addBrigade(foremanLogin, baseLocation) {
-    await this.query('call add_brigade(?, ?)', [foremanLogin, baseLocation]);
+    let result = await this.query('call add_brigade(?, ?)', [foremanLogin, baseLocation]);
+    if (result.affectedRows !== 1) {
+      throw 'Foreman with specified login does not exists';
+    }
   }
 
   async getBrigades() {
@@ -28,6 +31,7 @@ class ScheduleRepository {
       select
         b.id as id,
         b.base_location as baseLocation,
+        e.id as foremanId,
         e.login as login,
         e.first_name as firstName,
         e.last_name as lastName
@@ -67,7 +71,14 @@ class ScheduleRepository {
   }
 
   async addShift(shift) {
-    await this.query('call add_shift(?, ?, ?)', [shift.login, shift.brigadeId, shift.started]);
+    try {
+      let result = await this.query('call add_shift(?, ?, ?)', [shift.login, shift.brigadeId, shift.started]);
+      if (result.affectedRows !== 1) {
+        throw 'User does not exists or can not have shift at the moment';
+      }
+    } catch (_e) {
+      throw 'User does not exists or can not have shift at the moment';
+    }
   }
 
   async updateShiftBrigade(shiftId, brigadeId) {
@@ -98,7 +109,10 @@ class ScheduleRepository {
   }
 
   async addSchedule(scheduleInfo) {
-    await this.query('call add_to_schedule(?, ?, ?)', [scheduleInfo.project, scheduleInfo.brigadeId, scheduleInfo.started]);
+    let result = await this.query('call add_to_schedule(?, ?, ?)', [scheduleInfo.project, scheduleInfo.brigadeId, scheduleInfo.started]);
+    if (result.affectedRows !== 1) {
+      throw 'Can\'t add to schedule because brigade is already busy, project is closed or opened after date';
+    }
   }
 }
 

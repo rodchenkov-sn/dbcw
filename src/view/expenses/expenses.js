@@ -1,7 +1,11 @@
 const Tabulator = require('tabulator-tables');
 
-const projectsRepository = require('../../model/projects-repository')
-const dateFormatter = require('../../common/formatting')
+const projectsRepository = require('../../model/projects-repository');
+const dateFormatter = require('../../common/formatting');
+
+const makeNavbar = require('../../common/navbar-builder');
+
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");

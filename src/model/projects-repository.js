@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const { throwDeprecation } = require('process');
 const util = require('util');
 
 class ProjectsRepository {
@@ -22,6 +23,23 @@ class ProjectsRepository {
 
   async getProjects() {
     return await this.query('select * from projects');
+  }
+
+  async getProjectsFull() {
+    return await this.query(`
+    select
+      p.id     as id,
+      p.opened as opened,
+      p.closed as closed,
+      p.state  as state,
+      ps.name  as stateName,
+      p.type   as type,
+      pt.name  as typeName,
+      pt.price as price
+    from projects p
+      left join project_types  as pt on pt.id = p.type
+      left join project_states as ps on ps.id = p.state
+    `);
   }
 
   async addProject(project) {
@@ -96,12 +114,10 @@ class ProjectsRepository {
   }
 
   async addExpenses(expense) {
-    await this.query(`
-      insert into expenses
-        select null, ?, ?, ?
-          where exists(select * from projects where id = ?)`,
-      [expense.amount, expense.relatedProject, expense.date, expense.relatedProject]
-    );
+    let result = await this.query('call add_expense(?, ?, ?)', [expense.relatedProject, expense.amount, expense.date]);
+    if (result.affectedRows() !== 1) {
+      throw 'Project is closed or opened after expense date';
+    }
   }
 
 }

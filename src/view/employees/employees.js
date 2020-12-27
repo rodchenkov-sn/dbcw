@@ -1,6 +1,11 @@
 const Tabulator = require('tabulator-tables');
+const { dialog } = require('electron').remote
 
-const employeesRepository = require('../../model/employees-repository')
+const employeesRepository = require('../../model/employees-repository');
+
+const makeNavbar = require('../../common/navbar-builder');
+
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");
@@ -52,7 +57,7 @@ var table = new Tabulator("#example-table", {
   cellEdited: onDataChanged,
   rowContextMenu: [
     {
-      label: "Fire employee",
+      label: "Delete",
       action: onRowDeleted
     },
   ]
@@ -76,7 +81,6 @@ async function reloadTableData() {
     employee.employmentName = roles.get(employee.employment);
   }
   table.replaceData(employees);
-
 }
 
 reloadTableData();
@@ -105,5 +109,5 @@ document.querySelector('form').addEventListener('submit', (_event) => {
     lastName: ulastName,
     salary: usalary,
     employment: uemployment
-  }).then(reloadTableData);
+  }).then(reloadTableData).catch((reason) => dialog.showErrorBox('Could not register employee', reason));
 });

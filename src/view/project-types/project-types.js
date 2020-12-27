@@ -1,7 +1,10 @@
 const Tabulator = require('tabulator-tables');
-const { async } = require('validate.js');
 
-const projectsRepository = require('../../model/projects-repository')
+const projectsRepository = require('../../model/projects-repository');
+
+const makeNavbar = require('../../common/navbar-builder');
+
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");

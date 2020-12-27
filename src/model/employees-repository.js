@@ -1,3 +1,4 @@
+const settings = require('electron-settings');
 const mysql = require('mysql');
 const util = require('util');
 const bcrypt = require('bcrypt');
@@ -6,7 +7,6 @@ const saltRounds = 10;
 class EmployeesRepository {
 
   constructor() {
-    this.authorizedUser = null;
     this.connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
@@ -32,10 +32,13 @@ class EmployeesRepository {
       user.lastName,
       user.salary
     ];
-    await this.query(
+    let result = await this.query(
       'call add_employee(?, ?, ?, ?, ?, ?)',
       userArr
     );
+    if (result.affectedRows !== 1) {
+      throw 'Login already exists';
+    }
   }
 
   async authUser(login, password) {
@@ -49,18 +52,13 @@ class EmployeesRepository {
     let resUser = result[0];
     let passwordCorrect = await bcrypt.compare(password, result[0].pwd);
     if (passwordCorrect) {
-      this.authorizedUser = {
-        id: resUser.id,
-        login: resUser.login,
-        password: resUser.pwd,
-        employment: resUser.employment,
-        firstName: resUser.first_name,
-        lastName: resUser.last_name,
-        salary: resUser.salary
-      }
-      return this.authorizedUser;
+      await settings.set('user', {
+        'id': resUser.id,
+        'employment': resUser.employment
+      });
+    } else {
+      throw 'invalid password';
     }
-    throw 'invalid password';
   }
 
   async getEmployees() {
@@ -118,16 +116,27 @@ class EmployeesRepository {
   }
 
   async addToSickList(sickList) {
-    await this.query('call add_sick_list(?, ?, ?, ?)', [
+    let result = await this.query('call add_sick_list(?, ?, ?, ?)', [
       sickList.login,
       sickList.opened,
       sickList.closed,
       sickList.serial
     ]);
+    if (result.affectedRows !== 1) {
+      throw 'Login does not exists';
+    }
   }
 
   async deleteSickList(id) {
     await this.query('delete from sick_list where id = ?', [id]);
+  }
+
+  async getAuthorizedUserEmployment() {
+    return await settings.get('user.employment');
+  }
+
+  async getAuthorizedUserId() {
+    return await settings.get('user.id');
   }
 
 }

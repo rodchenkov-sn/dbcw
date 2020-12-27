@@ -1,6 +1,11 @@
 const Tabulator = require('tabulator-tables');
+const { dialog } = require('electron').remote;
 
 const scheduleRepository = require('../../model/schedule-repository');
+
+const makeNavbar = require('../../common/navbar-builder');
+
+makeNavbar().then((navbar) => document.querySelector('body').insertAdjacentHTML('afterbegin', navbar));
 
 const fieldEl = document.getElementById("filter-field");
 const typeEl = document.getElementById("filter-type");
@@ -84,5 +89,7 @@ reloadTableData();
 document.querySelector('form').addEventListener('submit', (_event) => {
   let foremanLogin = document.getElementById('foreman-input').value;
   let baseLocation = document.getElementById('location-input').value;
-  scheduleRepository.addBrigade(foremanLogin, baseLocation).then(reloadTableData);
+  scheduleRepository.addBrigade(foremanLogin, baseLocation)
+    .then(reloadTableData)
+    .catch((reason) => dialog.showErrorBox('Couldn\'t add new brigade', reason));
 });
