@@ -43,7 +43,7 @@ class EmployeesRepository {
 
   async authUser(login, password) {
     let result = await this.query(
-      'select * from employees where login = ?',
+      'select * from employees where login = ? and fired is null',
       [login]
     );
     if (result.length == 0) {
