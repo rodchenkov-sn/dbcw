@@ -62,7 +62,7 @@ class EmployeesRepository {
   }
 
   async getEmployees() {
-    let result = await this.query('select * from employees');
+    let result = await this.query('select * from employees where fired is null');
     let users = [];
     for (let row of result) {
       users.push({
@@ -96,7 +96,7 @@ class EmployeesRepository {
 
   async deleteEmployee(employee) {
     await this.query(
-      'delete from employees where id = ?', [employee.id]
+      'call delete_employee(?)', [employee.id]
     );
   }
 
