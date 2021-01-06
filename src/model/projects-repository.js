@@ -26,20 +26,7 @@ class ProjectsRepository {
   }
 
   async getProjectsFull() {
-    return await this.query(`
-    select
-      p.id     as id,
-      p.opened as opened,
-      p.closed as closed,
-      p.state  as state,
-      ps.name  as stateName,
-      p.type   as type,
-      pt.name  as typeName,
-      pt.price as price
-    from projects p
-      left join project_types  as pt on pt.id = p.type
-      left join project_states as ps on ps.id = p.state
-    `);
+    return await this.query('select * from projects_details');
   }
 
   async addProject(project) {

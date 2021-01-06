@@ -144,9 +144,9 @@ class EmployeesRepository {
       select
         e.first_name as firstName,
         e.last_name as lastName,
-        get_salary(e.id, '2020-12-01', '2021-01-01') as salary
+        get_salary(e.id, ?, ?) as salary
       from employees as e;
-    `);
+    `, [low, high]);
   }
 
   async getExpenses(low, high) {

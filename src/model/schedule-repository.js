@@ -63,7 +63,7 @@ class ScheduleRepository {
       from shifts as s
         join brigades b on b.id = s.brigade
         join employees e on e.id = s.employee
-        join employees c on c.id = b.chief;`
+        join employees c on c.id = b.chief`
     );
   }
 

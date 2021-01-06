@@ -17,7 +17,7 @@ const createWindow = () => {
     }
   });
   mainWindow.loadFile(path.join(__dirname, 'view/login/login.html'));
-  //mainWindow.removeMenu();
+  mainWindow.removeMenu();
 };
 
 app.allowRendererProcessReuse = false;

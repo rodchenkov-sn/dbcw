@@ -11,8 +11,6 @@ document.querySelector('form').addEventListener('submit', async (event) => {
     await employeesRepository.authUser(login, password);
     window.location.assign(path.join(__dirname, '../index/index.html'));
   } catch (e) {
-    document.querySelector('.hero').classList.remove("is-primary");
-    document.querySelector('.hero').classList.add("is-danger");
     dialog.showErrorBox('Login went wrong!', `An error occured while login: ${e}`);
   }
 });
